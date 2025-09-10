@@ -1,0 +1,119 @@
+
+        /* 
+         * It's best practice to move this CSS to a dedicated static file 
+         * (e.g., static/css/main.css) and link it using:
+         * <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        */
+        :root {
+            --sidebar-bg: #f3e8ff; /* Light Purple */
+            --sidebar-link-hover: #d1b3ff;
+            --sidebar-header-color: #3c096c;
+            --main-bg: #ffffff;
+            --sidebar-width: 260px;
+        }
+
+        body {
+            background-color: var(--main-bg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: var(--sidebar-width);
+            background-color: var(--sidebar-bg);
+            padding-top: 1.5rem;
+            transition: left 0.3s ease-in-out;
+            z-index: 1030;
+        }
+
+        .sidebar .nav-link {
+            color: #495057;
+            font-weight: 500;
+            margin: 5px 15px;
+            border-radius: .375rem;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: var(--sidebar-link-hover);
+            color: #000;
+        }
+
+        .sidebar .nav-link .bi {
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--sidebar-header-color);
+        }
+        
+        .sidebar .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 15px;
+            right: 15px;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            transition: margin-left 0.3s ease-in-out;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-footer {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: auto;
+            border-top: 1px solid #dee2e6;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                left: calc(-1 * var(--sidebar-width));
+            }
+            .sidebar.active {
+                left: 0;
+                box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .sidebar-toggler {
+                display: block !important;
+            }
+        }
+        
+        .sidebar-toggler {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1031;
+            background: var(--sidebar-bg);
+            border: 1px solid var(--sidebar-link-hover);
+        }
+#mainContent{
+    margin: 0;
+    padding: 0;
+}
+
+.content-footer{
+    background-color: #c9bbe0;
+    color: white;
+    text-align: center;
+    margin-top: auto;
+    
+
+}

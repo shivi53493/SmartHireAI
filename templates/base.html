@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SmartHireAI{% endblock %}</title>
+    
+    <!-- Bootstrap CSS (v5.3.3) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Bootstrap Icons (v1.11.3) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Custom CSS -->
+     <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <button class="btn d-lg-none sidebar-toggler" type="button" id="sidebarToggle"><i class="bi bi-list"></i></button>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">SmartHireAI</div>
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link active" href="#"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-briefcase-fill"></i>Jobs</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-people-fill"></i>Applicants</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear-fill"></i>Settings</a></li>
+            <hr class="mx-3">
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-info-circle-fill"></i>About Us</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-envelope-fill"></i>Contact Us</a></li>
+        </ul>
+        <a href="#" class="btn btn-danger logout-btn"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    </nav>
+
+    <main class="main-content" id="mainContent">
+        {% block content %}
+            <!-- Page-specific content will be injected here -->
+        {% endblock content %}
+
+        <footer class="content-footer">
+            &copy; {% now "Y" %} SmartHireAI. All Rights Reserved.
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        // Best practice: move to a static/js/main.js file
+        document.addEventListener("DOMContentLoaded", function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+
+            sidebarToggle?.addEventListener('click', () => sidebar?.classList.toggle('active'));
+            mainContent?.addEventListener('click', () => sidebar?.classList.remove('active'));
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
