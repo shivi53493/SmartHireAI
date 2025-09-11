@@ -50,9 +50,8 @@
                             <td>{{ job.due_date|date:"d M, Y" }}</td>
                            
                             <td>
-                                {# Action buttons will be added later #}
-                                <a href="#" class="btn btn-sm btn-outline-secondary" title="View Details"><i class="bi bi-eye"></i></a>
-                                <a href="#" class="btn btn-sm btn-outline-primary" title="Edit Job"><i class="bi bi-pencil"></i></a>
+                                <a href="{% url 'job_detail' job.pk %}" class="btn btn-sm btn-outline-secondary" title="View Details"><i class="bi bi-eye"></i></a>
+                                <a href="{% url 'job_update' job.pk %}" class="btn btn-sm btn-outline-primary" title="Edit Job"><i class="bi bi-pencil"></i></a>
                             </td>
                         </tr>
                         {% empty %}

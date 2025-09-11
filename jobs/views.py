@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Job
@@ -32,3 +32,27 @@ def job_create(request):
         'form': form,
     }
     return render(request, 'jobs_form.html', context)
+
+@login_required
+def job_update(request, pk):
+    """Handles updating an existing job."""
+    job = get_object_or_404(Job, pk=pk)
+    if request.method == 'POST':
+        form = JobForm(request.POST, instance=job)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Job "{job.project_name}" has been updated successfully!')
+            return redirect('job_list')
+    else:
+        form = JobForm(instance=job)
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'jobs_form.html', context)
+
+@login_required
+def job_detail(request, pk):
+    """Displays the details of a single job."""
+    job = get_object_or_404(Job, pk=pk)
+    return render(request, 'job_detail.html', {'job': job})

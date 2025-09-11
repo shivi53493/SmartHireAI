@@ -1,0 +1,146 @@
+{% extends "inner_base.html" %}
+
+{% block title %}Applicants - SmartHireAI{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/applicants.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="applicants-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2">Applicants</h1>
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newApplicantModal">
+            <i class="bi bi-person-plus-fill me-2"></i> New Applicant
+        </a>
+    </div>
+
+    <div class="card shadow-sm table_container">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Technology</th>
+                            <th scope="col">Experience (Months)</th>
+                            <th scope="col">Applied On</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for applicant in applicants %}
+                        <tr>
+                            <td><strong>{{ applicant.full_name }}</strong></td>
+                            <td>{{ applicant.email }}</td>
+                            <td>{{ applicant.get_technology_display }}</td>
+                            <td>{{ applicant.total_experience_months }}</td>
+                            <td>{{ applicant.created_at|date:"d M, Y" }}</td>
+                            <td>
+                                <a href="{% url 'applicants:applicant_detail' applicant.pk %}" class="btn btn-sm btn-outline-secondary" title="View Details"><i class="bi bi-eye"></i></a>
+                                <a href="{% url 'applicants:applicant_update' applicant.pk %}" class="btn btn-sm btn-outline-primary" title="Edit Applicant"><i class="bi bi-pencil"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <p class="text-muted h5">No applicants have been added yet.</p>
+                                <a href="#" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#newApplicantModal">Add the First Applicant</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if applicants.has_other_pages %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if applicants.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ applicants.previous_page_number }}">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    {% for i in applicants.paginator.page_range %}
+                        {% if applicants.number == i %}
+                            <li class="page-item active" aria-current="page"><span class="page-link">{{ i }}</span></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if applicants.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ applicants.next_page_number }}">Next</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- New Applicant Modal -->
+<div class="modal fade" id="newApplicantModal" tabindex="-1" aria-labelledby="newApplicantModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newApplicantModalLabel">Select Job</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted">First, select the job the new applicant is applying for.</p>
+                <div class="mb-3">
+                    <label for="jobSelect" class="form-label">Job Opening <span class="text-danger">*</span></label>
+                    <select class="form-select" id="jobSelect">
+                        <option value="" selected disabled>-- Please choose a job --</option>
+                        {% for job in jobs %}
+                            <option value="{{ job.pk }}">{{ job }}</option>
+                        {% endfor %}
+                    </select>
+                    <div id="jobSelectError" class="text-danger small mt-1 d-none">Please select a job.</div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <div>
+                    <button type="button" class="btn btn-outline-primary" id="uploadResumeBtn">
+                        <i class="bi bi-cloud-upload-fill me-2"></i>Upload Resume
+                    </button>
+                    <button type="button" class="btn btn-primary" id="completeFormBtn">
+                        <i class="bi bi-file-text-fill me-2"></i>Complete Form
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const completeFormBtn = document.getElementById('completeFormBtn');
+    const jobSelect = document.getElementById('jobSelect');
+    const jobSelectError = document.getElementById('jobSelectError');
+
+    completeFormBtn.addEventListener('click', function() {
+        const selectedJobId = jobSelect.value;
+        if (selectedJobId) {
+            const url = `{% url 'applicants:applicant_create' %}?job=${selectedJobId}`;
+            window.location.href = url;
+        } else {
+            jobSelectError.classList.remove('d-none');
+        }
+    });
+});
+</script>
+{% endblock %}

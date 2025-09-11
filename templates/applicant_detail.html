@@ -1,0 +1,124 @@
+{% extends "inner_base.html" %}
+{% load static %}
+
+{% block title %}Applicant Details - {{ applicant.full_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h1 class="h2 mb-0">{{ applicant.full_name }}</h1>
+            <p class="text-muted fs-5 mb-0">Applying for: {{ applicant.job }}</p>
+        </div>
+        <div>
+            <a href="{% url 'applicants:applicant_list' %}" class="btn btn-primary me-2">
+                <i class="bi bi-arrow-left me-1"></i> Back to Applicants
+            </a>
+            <a href="{% url 'applicants:applicant_update' applicant.pk %}" class="btn btn-primary">
+                <i class="bi bi-pencil-fill me-1"></i> Edit Applicant
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Details Card -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-light py-3">
+            <h5 class="mb-0">Personal & Employment Overview</h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-4">
+                <!-- Left Column -->
+                <div class="col-md-6">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5 fw-medium">Date of Birth:</dt>
+                        <dd class="col-sm-7">{{ applicant.date_of_birth|date:"F d, Y" }}</dd>
+
+                        <dt class="col-sm-5 fw-medium">Total Experience:</dt>
+                        <dd class="col-sm-7">{{ applicant.total_experience_months }} months</dd>
+
+                        <dt class="col-sm-5 fw-medium">Current Company:</dt>
+                        <dd class="col-sm-7">{{ applicant.current_company|default:"N/A" }}</dd>
+
+                        <dt class="col-sm-5 fw-medium">Current Position:</dt>
+                        <dd class="col-sm-7">{{ applicant.current_position }}</dd>
+                    </dl>
+                </div>
+                <!-- Right Column -->
+                <div class="col-md-6">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5 fw-medium">Notice Period:</dt>
+                        <dd class="col-sm-7">{{ applicant.notice_period_days }} days</dd>
+
+                        <dt class="col-sm-5 fw-medium">Highest Qualification:</dt>
+                        <dd class="col-sm-7">{{ applicant.get_highest_qualification_display }}</dd>
+
+                        <dt class="col-sm-5 fw-medium">Resume:</dt>
+                        <dd class="col-sm-7">
+                            {% if applicant.resume %}
+                                <a href="{{ applicant.resume.url }}" target="_blank">View/Download <i class="bi bi-box-arrow-up-right"></i></a>
+                            {% else %}
+                                Not Provided
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact & Skills Card -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-light py-3">
+            <h5 class="mb-0">Contact & Skills</h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h6>Contact Details</h6>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4 fw-medium">Email:</dt>
+                        <dd class="col-sm-8">{{ applicant.email }}</dd>
+                        <dt class="col-sm-4 fw-medium">Mobile:</dt>
+                        <dd class="col-sm-8">{{ applicant.mobile_number }}</dd>
+                        <dt class="col-sm-4 fw-medium">WhatsApp:</dt>
+                        <dd class="col-sm-8">{{ applicant.whatsapp_number }}</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <h6>Skill Details</h6>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4 fw-medium">Technology:</dt>
+                        <dd class="col-sm-8">{{ applicant.get_technology_display }}</dd>
+                    </dl>
+                    <h6 class="mt-3">Primary Skills</h6>
+                    {% for skill in applicant.primary_skills.all %}
+                        <span class="badge text-bg-secondary fs-6 me-2 mb-2 p-2">{{ skill.name }}</span>
+                    {% empty %}
+                        <p class="text-muted mb-0">No primary skills listed.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demographic Card -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-light py-3">
+            <h5 class="mb-0">Demographic Details</h5>
+        </div>
+        <div class="card-body p-4">
+            <dl class="row mb-0">
+                <dt class="col-sm-3 fw-medium">Address:</dt>
+                <dd class="col-sm-9">{{ applicant.house_number|default:'' }} {{ applicant.street_address|default:'' }}</dd>
+                <dt class="col-sm-3 fw-medium">City:</dt>
+                <dd class="col-sm-9">{{ applicant.get_city_display }}</dd>
+                <dt class="col-sm-3 fw-medium">State:</dt>
+                <dd class="col-sm-9">{{ applicant.get_state_display }}</dd>
+                <dt class="col-sm-3 fw-medium">Pin Code:</dt>
+                <dd class="col-sm-9">{{ applicant.pin_code|default:"N/A" }}</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+{% endblock %}

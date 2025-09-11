@@ -1,0 +1,23 @@
+/* Container for the main content on the applicants page */
+.applicants-container {
+    background-color: #f9f4ff; /* Match dashboard's light purple background */
+    padding: 2rem; /* Match dashboard's padding */
+    flex-grow: 1; /* Allow the container to fill vertical space */
+    display: flex;
+    flex-direction: column;
+    min-height: 80vh;
+    margin: 0;
+}
+
+/* The card containing the table */
+.table_container {
+    width: 100%;
+    margin: 0;
+}
+
+/* For responsiveness on smaller screens */
+@media (max-width: 768px) {
+    .applicants-container {
+        padding: 1rem;
+    }
+}

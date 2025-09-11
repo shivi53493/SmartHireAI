@@ -1,0 +1,119 @@
+{% extends "inner_base.html" %}
+{% load static %}
+
+{% block title %}Job Details - {{ job.project_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h1 class="h2 mb-0">{{ job.get_title_display }}</h1>
+            <p class="text-muted fs-5 mb-0">Project: {{ job.project_name }}</p>
+        </div>
+        <div>
+            <a href="{% url 'job_list' %}" class="btn btn-primary me-2">
+                <i class="bi bi-arrow-left me-1"></i> Back to Jobs
+            </a>
+            <a href="{% url 'job_update' job.pk %}" class="btn btn-primary">
+                <i class="bi bi-pencil-fill me-1"></i> Edit Job
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Details Card -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-light py-3">
+            <h5 class="mb-0">Job Overview</h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-4">
+                <!-- Left Column -->
+                <div class="col-md-6">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5 fw-medium">Technology:</dt>
+                        <dd class="col-sm-7">{{ job.get_technology_display }}</dd>
+
+                        <dt class="col-sm-5 fw-medium">Job Type:</dt>
+                        <dd class="col-sm-7">{{ job.get_job_type_display }}</dd>
+
+                        <dt class="col-sm-5 fw-medium">Purpose:</dt>
+                        <dd class="col-sm-7">{{ job.get_purpose_display }}</dd>
+
+                        <dt class="col-sm-5 fw-medium">Project Type:</dt>
+                        <dd class="col-sm-7">{{ job.get_project_type_display }}</dd>
+
+                        <dt class="col-sm-5 fw-medium">Number of Openings:</dt>
+                        <dd class="col-sm-7">{{ job.number_of_openings|default:"N/A" }}</dd>
+                    </dl>
+                </div>
+                <!-- Right Column -->
+                <div class="col-md-6">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5 fw-medium">Priority:</dt>
+                        <dd class="col-sm-7">
+                            {% if job.priority == 'HIGH' %}<span class="badge bg-danger">{{ job.get_priority_display }}</span>
+                            {% elif job.priority == 'MEDIUM' %}<span class="badge bg-warning text-dark">{{ job.get_priority_display }}</span>
+                            {% else %}<span class="badge bg-success">{{ job.get_priority_display }}</span>
+                            {% endif %}
+                        </dd>
+
+                        <dt class="col-sm-5 fw-medium">Due Date:</dt>
+                        <dd class="col-sm-7">{{ job.due_date|date:"F d, Y" }}</dd>
+
+                        <dt class="col-sm-5 fw-medium">Total Experience:</dt>
+                        <dd class="col-sm-7">{{ job.get_total_experience_display }}</dd>
+
+                        <dt class="col-sm-5 fw-medium">Relevant Experience:</dt>
+                        <dd class="col-sm-7">{{ job.get_relevant_experience_display }}</dd>
+
+                        <dt class="col-sm-5 fw-medium">Tenure:</dt>
+                        <dd class="col-sm-7">{{ job.get_tenure_display }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Card -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-light py-3">
+            <h5 class="mb-0">Required Skills</h5>
+        </div>
+        <div class="card-body p-4">
+            {% for skill in job.skills.all %}
+                <span class="badge text-bg-secondary fs-6 me-2 mb-2 p-2">{{ skill.name }}</span>
+            {% empty %}
+                <p class="text-muted mb-0">No specific skills listed.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Interviewers Card -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-light py-3">
+            <h5 class="mb-0">Stakeholders & Interviewers</h5>
+        </div>
+        <div class="card-body p-4">
+            <dl class="row mb-0">
+                <dt class="col-sm-4 fw-medium">Floor Manager:</dt>
+                <dd class="col-sm-8">{{ job.floor_manager.get_full_name|default:job.floor_manager }}</dd>
+
+                <dt class="col-sm-4 fw-medium">Project Manager:</dt>
+                <dd class="col-sm-8">{{ job.project_manager.get_full_name|default:job.project_manager|default:"N/A" }}</dd>
+
+                <dt class="col-sm-4 fw-medium">Director of Operation:</dt>
+                <dd class="col-sm-8">{{ job.director_of_operation.get_full_name|default:job.director_of_operation|default:"N/A" }}</dd>
+
+                <hr class="my-3">
+
+                <dt class="col-sm-4 fw-medium">1st Round Interviewer:</dt>
+                <dd class="col-sm-8">{{ job.first_round_interviewer.get_full_name|default:job.first_round_interviewer }}</dd>
+
+                <dt class="col-sm-4 fw-medium">2nd Round Interviewer:</dt>
+                <dd class="col-sm-8">{{ job.second_round_interviewer.get_full_name|default:job.second_round_interviewer|default:"N/A" }}</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+{% endblock %}

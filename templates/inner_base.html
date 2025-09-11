@@ -26,7 +26,7 @@
         <ul class="nav flex-column">
             <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a></li>
             <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name|slice:":4" == "job_" %}active{% endif %}" href="{% url 'job_list' %}"><i class="bi bi-briefcase-fill"></i>Jobs</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-people-fill"></i>Applicants</a></li>
+            <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name|slice:":10" == "applicant_" %}active{% endif %}" href="{% url 'applicants:applicant_list' %}"><i class="bi bi-people-fill"></i>Applicants</a></li>
             <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear-fill"></i>Settings</a></li>
             <hr class="mx-3">
             <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-info-circle-fill"></i>About Us</a></li>
