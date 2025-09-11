@@ -1,9 +1,4 @@
 
-        /* 
-         * It's best practice to move this CSS to a dedicated static file 
-         * (e.g., static/css/main.css) and link it using:
-         * <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        */
         :root {
             --sidebar-bg: #f3e8ff; /* Light Purple */
             --sidebar-link-hover: #d1b3ff;

@@ -1,0 +1,28 @@
+/* Container for the main content on the jobs page */
+.jobs-container {
+    background-color: #f9f4ff; /* Match dashboard's light purple background */
+    border-radius: .5rem; /* Match dashboard's border radius */
+    padding: 2rem; /* Match dashboard's padding */
+    flex-grow: 1; /* Allow the container to fill vertical space, like the dashboard */
+    display: flex;
+    flex-direction: column;
+    min-height: 80vh; /* Ensure it has a good height */
+}
+
+/* The card containing the table */
+.table_container {
+    width: 100%; /* Take full width of the container */
+    margin: 0;
+    margin-left: auto;/* Reset margin */
+}
+
+/* For responsiveness on smaller screens */
+@media (max-width: 768px) {
+    .jobs-container {
+        padding: 1rem; /* Reduce padding on smaller screens */
+    }
+
+    .jobs-container .h2 {
+        font-size: 1.5rem; /* Adjust heading size */
+    }
+}
