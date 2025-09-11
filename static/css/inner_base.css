@@ -58,20 +58,21 @@
 
         .main-content {
             margin-left: var(--sidebar-width);
-            padding: 2rem;
+            padding: 0rem;
             transition: margin-left 0.3s ease-in-out;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+          
         }
 
         .content-footer {
-            background-color: #f8f9fa;
-            color: #6c757d;
-            padding: 1.5rem;
+            background-color: #c9bbe0;
+            color: white;
+            padding: 1rem;
             text-align: center;
             margin-top: auto;
-            border-top: 1px solid #dee2e6;
+            border-top: 1px solid #d1b3ff; /* A color that fits the theme */
         }
 
         /* Responsive Styles */
@@ -99,16 +100,3 @@
             background: var(--sidebar-bg);
             border: 1px solid var(--sidebar-link-hover);
         }
-#mainContent{
-    margin: 0;
-    padding: 0;
-}
-
-.content-footer{
-    background-color: #c9bbe0;
-    color: white;
-    text-align: center;
-    margin-top: auto;
-    
-
-}
