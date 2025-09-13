@@ -112,12 +112,20 @@
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <div>
-                    <button type="button" class="btn btn-outline-primary" id="uploadResumeBtn">
+                    <!-- Hidden form for resume upload -->
+                    <form id="resumeUploadForm" class="d-none">
+                        <input type="file" id="resumeFileInput" name="resume" accept=".pdf,.docx">
+                        <input type="hidden" id="jobIdInput" name="job_id">
+                    </form>
+                    <button type="button" class="btn btn-outline-primary" id="uploadResumeBtn" onclick="document.getElementById('resumeFileInput').click();">
                         <i class="bi bi-cloud-upload-fill me-2"></i>Upload Resume
                     </button>
                     <button type="button" class="btn btn-primary" id="completeFormBtn">
                         <i class="bi bi-file-text-fill me-2"></i>Complete Form
                     </button>
+                    <div class="spinner-border text-primary ms-2 d-none" role="status" id="uploadSpinner">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -131,15 +139,67 @@ document.addEventListener("DOMContentLoaded", function() {
     const completeFormBtn = document.getElementById('completeFormBtn');
     const jobSelect = document.getElementById('jobSelect');
     const jobSelectError = document.getElementById('jobSelectError');
+    const resumeFileInput = document.getElementById('resumeFileInput');
+    const uploadSpinner = document.getElementById('uploadSpinner');
+    const uploadResumeBtn = document.getElementById('uploadResumeBtn');
 
-    completeFormBtn.addEventListener('click', function() {
+    // Function to handle form redirection
+    function redirectToForm(button, errorDisplay) {
         const selectedJobId = jobSelect.value;
         if (selectedJobId) {
+            errorDisplay.classList.add('d-none');
             const url = `{% url 'applicants:applicant_create' %}?job=${selectedJobId}`;
             window.location.href = url;
         } else {
-            jobSelectError.classList.remove('d-none');
+            errorDisplay.classList.remove('d-none');
         }
+    }
+
+    completeFormBtn.addEventListener('click', () => redirectToForm(completeFormBtn, jobSelectError));
+
+    // Handle resume file selection and upload
+    resumeFileInput.addEventListener('change', function() {
+        const selectedJobId = jobSelect.value;
+        if (!selectedJobId) {
+            jobSelectError.classList.remove('d-none');
+            this.value = ''; // Reset file input
+            return;
+        }
+        jobSelectError.classList.add('d-none');
+
+        const formData = new FormData();
+        formData.append('resume', this.files[0]);
+        formData.append('job_id', selectedJobId);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        // Show spinner and disable buttons
+        uploadSpinner.classList.remove('d-none');
+        uploadResumeBtn.disabled = true;
+        completeFormBtn.disabled = true;
+
+        fetch("{% url 'applicants:parse_resume' %}", {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                window.location.href = data.redirect_url;
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An unexpected error occurred during upload.');
+        })
+        .finally(() => {
+            // Hide spinner and re-enable buttons
+            uploadSpinner.classList.add('d-none');
+            uploadResumeBtn.disabled = false;
+            completeFormBtn.disabled = false;
+            this.value = ''; // Reset file input
+        });
     });
 });
 </script>
